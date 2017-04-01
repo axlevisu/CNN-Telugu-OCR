@@ -8,7 +8,7 @@ from imread import imread
 # fix random seed for reproducibility
 seed = 7
 numpy.random.seed(seed)
-numbers_dir = "../data/"
+numbers_dir = "../data/numbers/"
 X = []
 y =[]
 for i in xrange(3000):
