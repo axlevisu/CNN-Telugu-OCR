@@ -1,3 +1,4 @@
+# keras-nnumerical
 import numpy as np
 # from imread import imread
 from PIL import Image
@@ -26,29 +27,33 @@ for i in xrange(3000):
 
 X = np.array(X)
 y = np.array(y)
+shape = X[0].shape
+X = X.reshape(X.shape[0], 1, 32, 32).astype('float32')
+
+
 X_train = X[0:2400]
 y_train = y[0:2400]
 
 X_test = X[2400:]
 y_test = y[2400:]
+# Convert to vectors
 y_train = np_utils.to_categorical(y_train)
 y_test = np_utils.to_categorical(y_test)
 
-X_train = X_train.reshape(X_train.shape[0], 1, 32, 32).astype('float32')
-X_test = X_test.reshape(X_test.shape[0], 1, 32, 32).astype('float32')
+
 
 num_classes = y_test.shape[1]
 pixels = len(X[0])
-shape = X[0].shape
+
 model = Sequential()
-model.add(Conv2D(20, (8, 8), input_shape=(1, 32, 32), activation='relu'))
+model.add(Conv2D(30, (5, 5), input_shape=(1, 32, 32), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Conv2D(15, (4, 4), activation='relu'))
+model.add(Conv2D(15, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.2))
 model.add(Flatten())
-model.add(Dense(150, activation='relu'))	
-model.add(Dense(60, activation='relu'))
+model.add(Dense(128, activation='relu'))	
+model.add(Dense(50, activation='relu'))
 # model.add(Dense(pixels, input_shape = shape, kernel_initializer='normal',  activation='relu'))
 model.add(Dense(num_classes, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
