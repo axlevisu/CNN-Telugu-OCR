@@ -1,6 +1,6 @@
 from PIL import Image
 
-images=map(Image.open, ['../data/numbers/img157.bmp','../data/numbers/img177.bmp','../data/numbers/img160.bmp','../data/numbers/img187.bmp'])
+images=map(Image.open, ['../data/numbers/img38.bmp','../data/numbers/img19.bmp','../data/numbers/img104.bmp','../data/numbers/img172.bmp'])
 j=0
 for im in images:
 	print j
@@ -20,5 +20,5 @@ for im in images:
 	new_im.paste(im,(x_offset,0))
 	x_offset+=im.size[0]
 
-new_im.save('d.bmp')
+new_im.save('h.jpg')
 

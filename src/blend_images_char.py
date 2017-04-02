@@ -1,6 +1,6 @@
 from PIL import Image
 
-images=map(Image.open, ['../data/characters/usr_1/000012t01r.tiff','../data/characters/usr_4/000012t01r.tiff','../data/characters/usr_3/000012t01r.tiff','../data/characters/usr_6/000012t01r.tiff'])
+images=map(Image.open, ['../data/characters/usr_1/000018t01r.tiff','../data/characters/usr_4/000017t01r.tiff','../data/characters/usr_3/000013t01r.tiff','../data/characters/usr_6/000009t01r.tiff'])
 j=0
 for im in images:
 	print j
@@ -20,5 +20,5 @@ for im in images:
 	new_im.paste(im,(x_offset,0))
 	x_offset+=im.size[0]
 
-new_im.save('b.tiff')
+new_im.save('d.jpg')
 
