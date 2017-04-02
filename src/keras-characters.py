@@ -27,7 +27,7 @@ for i in xrange(147):
 		y.append(int(image_name))		
 		X.append(np.array(im)*1)
 
-t = round(len(X)*0.8)		
+t = int(round(len(X)*0.8))		
 X = np.array(X)
 y = np.array(y)
 X_train = X[0:t]
@@ -40,8 +40,8 @@ y_train = np_utils.to_categorical(y_train)
 y_test = np_utils.to_categorical(y_test)
 
 model = Sequential()
-model.add(ZeroPadding2D((1,1),input_shape=(1,None,None)))
-model.add(Conv2D(50, (5, 5), activation='relu'))
+# model.add(ZeroPadding2D((1,1),input_shape=(1,None,None)))
+model.add(Conv2D(50, (5, 5), input_shape=(1,None,None), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Conv2D(20, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
