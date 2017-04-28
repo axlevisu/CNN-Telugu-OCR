@@ -30,11 +30,15 @@ for i in range(24)+range(25,147):
 		y.append(int(image_name))
 		b = np.zeros((size, size))
 		b[:im.shape[0],:im.shape[1]] = im
-		X.append(b) 		
+		X.append(b.flatten()) 		
 
 t = int(round(len(X)*0.8))		
 X = np.array(X)
 y = np.array(y)
+Z = np.c_[X,y]
+np.random.shuffle(Z)
+X = Z[:,:-1]
+y = Z[:,-1]
 X = X.reshape(X.shape[0], 1, size, size).astype('float32')
 
 X_train = X[0:t]
