@@ -23,16 +23,16 @@ max_size = 64
 size = 32
 char_dir = '../data/characters/'
 for i in range(24)+range(25,147):
-folder = char_dir + 'usr_' + str(i) + '/'
-for imagefile in glob.glob(folder + '*r.tiff'):
-im = rescale(dilation(np.invert(io.imread(imagefile)),square(3)),float(size)/max_size)
-image_name = imagefile[-12:-9]
-y.append(int(image_name))
-b = np.zeros((size, size))
-b[:im.shape[0],:im.shape[1]] = im
-X.append(b) 
+	folder = char_dir + 'usr_' + str(i) + '/'
+	for imagefile in glob.glob(folder + '*r.tiff'):
+		im = rescale(dilation(np.invert(io.imread(imagefile)),square(3)),float(size)/max_size)
+		image_name = imagefile[-12:-9]
+		y.append(int(image_name))
+		b = np.zeros((size, size))
+		b[:im.shape[0],:im.shape[1]] = im
+		X.append(b) 		
 
-t = int(round(len(X)*0.8))	
+t = int(round(len(X)*0.8))		
 X = np.array(X)
 y = np.array(y)
 X = X.reshape(X.shape[0], 1, size, size).astype('float32')
@@ -51,3 +51,24 @@ model.add(Conv2D(1, (7, 7), padding='SAME', input_shape=(1,size,size), activatio
 model.add(BatchNormalization(axis=-1, momentum=0.99, epsilon=0.001, center=True, scale=True, beta_initializer='zeros', gamma_initializer='ones', moving_mean_initializer='zeros', moving_variance_initializer='ones', beta_regularizer=None, gamma_regularizer=None, beta_constraint=None, gamma_constraint=None))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Conv2D(32, (5, 5), padding='SAME',  activation='relu'))
+model.add(BatchNormalization(axis=-1, momentum=0.99, epsilon=0.001, center=True, scale=True, beta_initializer='zeros', gamma_initializer='ones', moving_mean_initializer='zeros', moving_variance_initializer='ones', beta_regularizer=None, gamma_regularizer=None, beta_constraint=None, gamma_constraint=None))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(64, (5, 5), padding='SAME',  activation='relu'))
+model.add(BatchNormalization(axis=-1, momentum=0.99, epsilon=0.001, center=True, scale=True, beta_initializer='zeros', gamma_initializer='ones', moving_mean_initializer='zeros', moving_variance_initializer='ones', beta_regularizer=None, gamma_regularizer=None, beta_constraint=None, gamma_constraint=None))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(128, (3, 3), padding='SAME',  activation='relu'))
+model.add(BatchNormalization(axis=-1, momentum=0.99, epsilon=0.001, center=True, scale=True, beta_initializer='zeros', gamma_initializer='ones', moving_mean_initializer='zeros', moving_variance_initializer='ones', beta_regularizer=None, gamma_regularizer=None, beta_constraint=None, gamma_constraint=None))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(256, (3, 3), padding='SAME',  activation='relu'))
+model.add(BatchNormalization(axis=-1, momentum=0.99, epsilon=0.001, center=True, scale=True, beta_initializer='zeros', gamma_initializer='ones', moving_mean_initializer='zeros', moving_variance_initializer='ones', beta_regularizer=None, gamma_regularizer=None, beta_constraint=None, gamma_constraint=None))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.2))
+model.add(Flatten())
+model.add(Dense(1024, activation='relu'))	
+model.add(Dense(num_classes, activation='softmax'))
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.fit(X_train, y_train, validation_split=0.25, epochs=16, batch_size=128)
+model.save('teluguchar4.h5')
+
+scores = model.evaluate(X_test, y_test, verbose=0)
+print("CNN Error: %.2f%%" % (100-scores[1]*100))
