@@ -19,18 +19,14 @@ K.set_image_dim_ordering('th')
 X = []
 y =[]
 # Restrict maximum width/height to 128 due to memory constraints
-max_size = 64
 size = 32
-char_dir = '../data/characters/'
-for i in range(24)+range(25,147):
-	folder = char_dir + 'usr_' + str(i) + '/'
-	for imagefile in glob.glob(folder + '*r.tiff'):
-		im = rescale(dilation(np.invert(io.imread(imagefile)),square(3)),float(size)/max_size)
-		image_name = imagefile[-12:-9]
-		y.append(int(image_name))
-		b = np.zeros((size, size))
-		b[:im.shape[0],:im.shape[1]] = im
-		X.append(b) 		
+max_size = 64
+char_dir = '../data/64characters/'
+for imagefile in glob.glob(char_dir + '*.tiff'):
+	im = rescale(dilation(np.invert(io.imread(imagefile)),square(5)),float(size)/max_size)
+	image_name = imagefile[-11:-8]
+	y.append(int(image_name))
+	X.append(im) 	
 
 t = int(round(len(X)*0.8))		
 X = np.array(X)

@@ -12,23 +12,18 @@ from sklearn import svm, linear_model, neighbors
 X = []
 y =[]
 # Restrict maximum width/height to 128 due to memory constraints
-max_size = 50
-char_dir = '../data/original-characters/'
-for i in range(24)+range(25,147):
-	folder = char_dir + 'usr_' + str(i) + '/'
-	for imagefile in glob.glob(folder + '*.tiff'):
-		im  = io.imread(imagefile)
-		f = float(max_size)/max(im.shape)
-		im = rescale(im,f)
-		b = np.zeros((max_size, max_size))
-		b[:im.shape[0],:im.shape[1]] = im
-		features =[]
-		for i in xrange(10):
-			for j in xrange(10):
-				features.append(sum(sum(b[5*i:5 + 5*i,5*j:5+5*j])))
-		image_name = imagefile[-11:-8]
-		y.append(int(image_name))
-		X.append(features) 		
+max_size = 64
+char_dir = '../data/64characters/'
+for imagefile in glob.glob(char_dir + '*.tiff'):
+	im  = io.imread(imagefile)
+	im = dialtion(np.invert(im),square(3))
+	features =[]
+	for i in xrange(8):
+		for j in xrange(8):
+			features.append(sum(sum(im[4*i:4 + 4*i,4*j:4+4*j])))
+	image_name = imagefile[-11:-8]
+	y.append(int(image_name))
+	X.append(features) 		
 
 print "done reading"
 t = int(round(len(X)*0.8))		
