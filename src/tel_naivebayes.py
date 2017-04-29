@@ -22,11 +22,16 @@ y =[]
 size = 32
 max_size = 64
 char_dir = '../data/64characters/'
+
+#reading the dataset from the relevant directories and preprocessing it
+
 for imagefile in glob.glob(char_dir + '*.tiff'):
 	im = rescale(dilation(np.invert(io.imread(imagefile)),square(5)),float(size)/max_size)
 	image_name = imagefile[-11:-8]
 	y.append(int(image_name))
 	X.append(im) 	
+
+#partitioning the data as train and test dataset
 
 t = int(round(len(X)*0.8))		
 X = np.array(X)
@@ -45,17 +50,23 @@ y_test = np_utils.to_categorical(y_test)
 print X_train.shape
 print y_train.shape
 
+#flattening the input of train data set
+
 a=[]
 for i in range(X_train.shape[0]):
     a.append(X_train[i].flatten())
 
 a=np.asarray(a)
 
+#flatenning the input of test dataset
+
 b=[]
 for i in range(X_test.shape[0]):
 	b.append(X_test[i].flatten())
 
 b=np.asarray(b)
+
+#flattening the output of train dataset
 
 c=[]
 for i in range(y_train.shape[0]):
@@ -67,6 +78,8 @@ for i in range(y_train.shape[0]):
 			k=k+1
 c=np.asarray(c)
 
+#flattening the output of test dataset
+
 d=[]
 for i in range(y_test.shape[0]):
 	k=0
@@ -77,7 +90,7 @@ for i in range(y_test.shape[0]):
 			k=k+1
 d=np.asarray(d)
 
-
+#implementing a naive bayesian classifier
 
 model=GaussianNB()
 model.fit(a,c)
