@@ -27,6 +27,7 @@ for i in range(24) + range(25,147):
 	folder = char_dir + 'usr_' + str(i) + '/'
 	for imagefile in glob.glob(folder + '*.tiff'):
 		im = Image.open(imagefile)
+		im = im.filter(ImageFilter.MinFilter(7))
 		im = scale(im,(64,64))
 		im.save( save_dir + str(i) + imagefile[-11:-5] + '.tiff' )
 

@@ -17,13 +17,13 @@ char_dir = '../data/64characters/'
 for imagefile in glob.glob(char_dir + '*.tiff'):
 	im  = io.imread(imagefile)
 	im = dialtion(np.invert(im),square(3))
-	features =[]
+	features =[0]*64
 	for i in xrange(8):
 		for j in xrange(8):
-			features.append(sum(sum(im[4*i:4 + 4*i,4*j:4+4*j])))
+			features[i+8*j] = im[4*i:4 + 4*i,4*j:4+4*j].sum
 	image_name = imagefile[-11:-8]
 	y.append(int(image_name))
-	X.append(features) 		
+	X.append([features]) 		
 
 print "done reading"
 t = int(round(len(X)*0.8))		
